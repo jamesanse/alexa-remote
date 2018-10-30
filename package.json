@@ -32,8 +32,8 @@
     "extend": "^3.0.2"
   },
   "devDependencies": {
-    "mocha": "^2.3.4",
-    "chai": "^3.4.1"
+    "mocha": "^5.2.0",
+    "chai": "^4.2.0"
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha"
