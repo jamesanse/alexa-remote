@@ -328,7 +328,6 @@ class AlexaRemote extends EventEmitter {
                         //device._orig = JSON.parse(JSON.stringify(device));
                         device._name = name;
                         device.sendCommand = this.sendCommand.bind(this, device);
-                        device.setTunein = this.setTunein.bind(this, device);
                         device.playAudible = this.playAudible.bind(this, device);
                         device.rename = this.renameDevice.bind(this, device);
                         device.setDoNotDisturb = this.setDoNotDisturb.bind(this, device);
@@ -1767,46 +1766,6 @@ class AlexaRemote extends EventEmitter {
         }
         if (cached === undefined) cached = true;
         this.httpsGet (`/api/bluetooth?cached=${cached}`, callback);
-    }
-
-    tuneinSearchRaw(query, callback) {
-        this.httpsGet (`/api/tunein/search?query=${query}&mediaOwnerCustomerId=${this.ownerCustomerId}&_=%t`, callback);
-    }
-
-    tuneinSearch(query, callback) {
-        query = querystring.escape(query);
-        this.tuneinSearchRaw(query, callback);
-    }
-
-    setTunein(serialOrName, guideId, contentType, callback) {
-        if (typeof contentType === 'function') {
-            callback = contentType;
-            contentType = 'station';
-        }
-        const dev = this.find(serialOrName);
-        if (!dev) return callback && callback(new Error('Unknown Device or Serial number'), null);
-
-        const encodedStationId = `["music/tuneIn/${contentType}Id","${guideId}"]|{"previousPageId":"TuneIn_SEARCH"}`;
-        const encoding1 = Buffer.from(encodedStationId).toString('base64');
-        const encoding2 = Buffer.from(encoding1).toString('base64');
-        const tuneInJson = {
-            contentToken: `music:${encoding2}`
-        };
-        const flags = {
-            data: JSON.stringify(tuneInJson),
-            method: 'PUT'
-        };
-        this.httpsGet (`/api/entertainment/v1/player/queue?deviceSerialNumber=${dev.serialNumber}&deviceType=${dev.deviceType}`, callback, flags);
-
-        /*
-        this.httpsGet (`/api/tunein/queue-and-play
-           ?deviceSerialNumber=${dev.serialNumber}
-           &deviceType=${dev.deviceType}
-           &guideId=${guideId}
-           &contentType=${contentType}
-           &callSign=
-           &mediaOwnerCustomerId=${dev.deviceOwnerCustomerId}`, callback, { method: 'POST' });
-         */
     }
 
     /**

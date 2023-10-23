@@ -478,17 +478,6 @@ declare module "alexa-remote2" {
 
         getBluetooth(cached: boolean, callback: CallbackWithErrorAndBody): void;
 
-        tuneinSearchRaw(query: string, callback: CallbackWithErrorAndBody): void;
-
-        tuneinSearch(query: string, callback: CallbackWithErrorAndBody): void;
-
-        setTunein(
-            serialOrName: SerialOrName,
-            guideId: string,
-            contentType: string,
-            callback: CallbackWithErrorAndBody
-        ): void;
-
         getCustomerHistoryRecords(
             options: GetCustomerHistoryRecordsOptions,
             callback: CallbackWithErrorAndBody
